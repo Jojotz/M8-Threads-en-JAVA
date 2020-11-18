@@ -1,13 +1,13 @@
 /*
  * @author Joan Coll
- * @version M8 Threads en Java 16/11/2020
+ * @version M8 Threads Fase 4 en Java 18/11/2020
+ * Se pide a usuario una velocidad objetivo a asumir por cada cohete. Vo = 650 m/s. VmaxRocket1 = 1746 m/s VmaxRocket2 = 2099 m/s 
  */
 
 package com.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JOptionPane;
 
 import com.applications.MyControls;
@@ -18,7 +18,6 @@ public class Main {
 	
 	public static void main(String[] args) throws Exception {
 		
-		//Fase 1 & Fase 2   -> Pot actual, Pot max, Pot objetivo.
 		Thruster thruster1 = new Thruster (0,10,0,null);
 		Thruster thruster2 = new Thruster (0,30,0,null);
 		Thruster thruster3 = new Thruster (0,80,0,null);
@@ -45,9 +44,9 @@ public class Main {
 		thrustersR2.add(thruster8);
 		thrustersR2.add(thruster9);
 		
-		//Creo rockets con su potencia total máxima
-		Rocket rocket1 = new Rocket ("32WESSDS", thrustersR1, 120);
-		Rocket rocket2 = new Rocket ("LDSFJA32", thrustersR2, 210);
+		//Creo rockets con su potencia total máxima y la velocidad inicial como velocidad actual, y la velocidad máxima
+		Rocket rocket1 = new Rocket ("32WESSDS", thrustersR1, 120,650,1745.4451);
+		Rocket rocket2 = new Rocket ("LDSFJA32", thrustersR2, 210,650,2099.13767);
 		
 		//Añado rockets a cada thruster
 		thruster1.setRocket(rocket1);
@@ -64,42 +63,45 @@ public class Main {
 		System.out.println ("Coet: " + rocket1.getCode() + " amb " + rocket1.getThrusters().size() + " propulsors, cadascun amb potència màxima de: " + rocket1.thrustMaxPowers());
 		System.out.println ("Coet: " + rocket2.getCode() + " amb " + rocket2.getThrusters().size() + " propulsors, cadascun amb potència màxima de: " + rocket2.thrustMaxPowers() + "\n");
 		
-		//Fase 3		
+		System.out.println ("Ambdos coets es mouen a una velocitat incial de 650 m/s");
+		
+		//Fase 4		
 		int choice = 0;
 		Integer i = null;
-		int targetPower = 0; 
-		
+		float targetSpeed = 0; 
+				
 		do {
 			
 			choice = 0;				
 			
 			try {
 				
-				choice = Integer.parseInt(JOptionPane.showInputDialog("Tria què vols fer: 1.- Introduir potència objectiu. / 2.- Tancar programa."));
+				choice = Integer.parseInt(JOptionPane.showInputDialog("Tria què vols fer: 1.- Introduir velocitat objectiu. / 2.- Tancar programa."));
 				i = choice;
 				choice = MyControls.wrongChoice(choice);
 							
 			} catch (NumberFormatException e) {
 			        
-				System.out.println("Error! Recorda: 1.- Introduir potència objectiu. / 2.- Tancar programa.");
+				System.out.println("Error! Recorda: 1.- Introduir velocitat objectiu. / 2.- Tancar programa.");
 			}
 			
 			switch  (choice) {			
 						
 				case 1:
 									
-					targetPower = Integer.parseInt(JOptionPane.showInputDialog("Introdueix la potència objectiu a assolir: "));
+					targetSpeed = Float.parseFloat(JOptionPane.showInputDialog("Introdueix la velocitat objectiu a assolir en m/s: "));
+					targetSpeed = MyControls.rightSpeed(targetSpeed); //Controlamos que velocidad objetivo sea mayor que la inicial
+				
+					thruster1.setTargetSpeed(targetSpeed);
+					thruster2.setTargetSpeed(targetSpeed);
+					thruster3.setTargetSpeed(targetSpeed);
 					
-					thruster1.setTargetPower(targetPower);
-					thruster2.setTargetPower(targetPower);
-					thruster3.setTargetPower(targetPower);
-					
-					thruster4.setTargetPower(targetPower);
-					thruster5.setTargetPower(targetPower);
-					thruster6.setTargetPower(targetPower);
-					thruster7.setTargetPower(targetPower);
-					thruster8.setTargetPower(targetPower);
-					thruster9.setTargetPower(targetPower);
+					thruster4.setTargetSpeed(targetSpeed);
+					thruster5.setTargetSpeed(targetSpeed);
+					thruster6.setTargetSpeed(targetSpeed);
+					thruster7.setTargetSpeed(targetSpeed);
+					thruster8.setTargetSpeed(targetSpeed);
+					thruster9.setTargetSpeed(targetSpeed);
 										
 					Thread t1 = new Thread (thruster1);
 					t1.start ();

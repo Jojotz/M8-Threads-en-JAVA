@@ -11,8 +11,17 @@ public class MyControls extends InputMismatchException {
 		
 		while (choice > 2 || choice < 1) {
 			
-			choice = Integer.parseInt(JOptionPane.showInputDialog("Número introduït incorrecte! Recorda: 1.- Introduir potència objectiu. / 2.- Tancar programa."));
+			choice = Integer.parseInt(JOptionPane.showInputDialog("Número introduït incorrecte! Recorda: 1.- Introduir velocitat objectiu. / 2.- Tancar programa."));
 		}		
 		return choice;		
-	}	
+	}
+	
+	public static float rightSpeed (float targetSpeed ){
+		
+		while (targetSpeed <= 650 ) {
+			
+			targetSpeed = Integer.parseInt(JOptionPane.showInputDialog("Has introduït una velocitat més baixa de 650 m/s, torna-ho a probar"));
+		}		
+		return targetSpeed;		
+	}
 }

@@ -1,5 +1,5 @@
 eclipse.preferences.version=1
 encoding//src/com/applications/MyControls.java=UTF-8
 encoding//src/com/domain/Rocket.java=UTF-8
-encoding//src/com/domain/Thruster.java=UTF-8
+encoding//src/com/domain/Thruster.java=Cp1252
 encoding//src/com/view/Main.java=UTF-8

@@ -2,63 +2,43 @@ package com.domain;
 
 public class Thruster implements Runnable {
 	
-	private int maxPower;      		//Maximum power of a thruster
-	private int currentPower; 		//Current power of a thruster
-	private int targetPower;		//Total target power
+	private int maxPower;      			//Maximum power of a thruster
+	private int currentPower; 			//Current power of a thruster
+	private double targetSpeed;			//Total target power
 	private Rocket rocket;			
-	private int totCurrentPower;    //Total current power of all thrusters
+	//private int totCurrentPower;    	//Total current power of all thrusters
+	private double initialSpeed = 650;  //Declaro la Vo a 650 m/s
 	
-	public Thruster (int currentPower, int maxPower, int targetPower, Rocket rocket) {
+	public Thruster (int currentPower, int maxPower, float targetSpeed, Rocket rocket) {
 		
 		this.currentPower = currentPower;
 		this.maxPower = maxPower;
-		this.targetPower = targetPower;
+		this.targetSpeed = targetSpeed;
 		this.rocket = rocket;
 	} 
 
 	public void run () {	
-		
-		totCurrentPower = getRocket().getTotalCurrentPower();
 				
-		if (getTargetPower() > totCurrentPower) {
+		if (getTargetSpeed() > initialSpeed) {
 			
-			speedUp();
-		
-		} else if (getTargetPower() < totCurrentPower) {
-				
-			brake();	
+			speedUp();		
 		} 					
 	}
 
 	public synchronized void speedUp () {
 			
-		while (currentPower < maxPower && (getTargetPower() > getRocket().getTotalCurrentPower())) {
+		while (currentPower < maxPower && (getTargetSpeed() > getRocket().getCurrentSpeed())) {
 			
 			currentPower++;				
 			System.out.println(toString());
 			try {
-				Thread.sleep(300);
+				Thread.sleep(400);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				return;
 			}				
 		} 
 	}
-	
-	public synchronized void brake () {
-		
-		while (currentPower > 0 && (getTargetPower() < getRocket().getTotalCurrentPower())) {
-			
-			currentPower--;
-			System.out.println(toString());
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				return;
-			}
-		} 
-	}	
 	
 	@Override
 	public String toString () {
@@ -67,15 +47,17 @@ public class Thruster implements Runnable {
 		output.append(getRocket().getCode());
 		output.append(": ");
 		output.append("P:");
-		output.append(getRocket().getRocketCurrentPower() +"\n");
+		output.append(getRocket().getRocketCurrentPower());
+		output.append( " V:");
+		output.append(getRocket().getCurrentSpeed() + "m/s" +"\n");
 		
-		if (getTargetPower() == getRocket().getTotalCurrentPower()) {
+		if (getTargetSpeed() <= getRocket().getCurrentSpeed()) {
 			
-			output.append(" ---> El coet: " + getRocket().getCode() + " ha arribat a la potÃ¨ncia objectiu." + "\n");
+			output.append(" ---> El coet: " + getRocket().getCode() + " ha arribat a la velocitat objectiu." + "\n");
 		
-		} else if ((getTargetPower() > getRocket().getTotalCurrentPower()) && ( getTargetPower() > getRocket().getMaxTotPowerR()) && (getRocket().getTotalCurrentPower() ==  getRocket().getMaxTotPowerR())) {
+		} else if ((getTargetSpeed() > getRocket().getCurrentSpeed()) && (getTargetSpeed() > getRocket().getMaxSpeedR()) && (getRocket().getCurrentSpeed() >=  getRocket().getMaxSpeedR())) {
 			
-			output.append(" ---> El coet: " + getRocket().getCode() + " ha arribat a la potÃ¨ncia mÃ xima, i no podrÃ¡ assolir l'objectiu." + "\n");
+			output.append(" ---> El coet: " + getRocket().getCode() + " ha arribat a la potència màxima, i no podrá assolir la velocitat l'objectiu." + "\n");
 		}
 		
 		return output.toString();
@@ -89,12 +71,12 @@ public class Thruster implements Runnable {
 		return currentPower;		
 	}
 
-	public int getTargetPower() {
-		return targetPower;
+	public double getTargetSpeed() {
+		return targetSpeed;
 	}
 
-	public void setTargetPower(int targetPower) {
-		this.targetPower = targetPower;
+	public void setTargetSpeed(float targetSpeed) {
+		this.targetSpeed = targetSpeed;
 	}
 	
 	public Rocket getRocket() {
